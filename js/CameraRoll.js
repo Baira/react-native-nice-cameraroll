@@ -8,6 +8,7 @@
  * @format
  */
 'use strict';
+import {useState} from 'react';
 import {Platform} from 'react-native';
 import RNCCameraRoll from './nativeInterface';
 
@@ -244,6 +245,49 @@ class CameraRoll {
 
     return promise;
   }
+
+  static useCameraRoll = useCameraRoll;
+}
+
+const initialState: PhotoIdentifiersPage = {
+  edges: [],
+  page_info: {
+    start_cursor: '',
+    end_cursor: '',
+    has_next_page: false,
+  },
+};
+
+const defaultConfig: GetPhotosParams = {
+  first: 20,
+  groupTypes: 'All',
+};
+
+function useCameraRoll() {
+  const [photos, setPhotos] = useState<PhotoIdentifiersPage>(initialState);
+
+  function getPhotos(config: GetPhotosParams = defaultConfig): void {
+    CameraRoll.getPhotos(config)
+      .then(setPhotos)
+      .catch(err => {
+        if (__DEV__) {
+          console.log('[useCameraRoll] Error getting photos: ', err);
+        }
+      });
+  }
+
+  function saveToCameraRoll(
+    tag: string,
+    options: SaveToCameraRollOptions = {},
+  ): void {
+    CameraRoll.save(tag, options).catch(err => {
+      if (__DEV__) {
+        console.log('[useCameraRoll] Error saving to camera roll: ', err);
+      }
+    });
+  }
+
+  return {photos, getPhotos, saveToCameraRoll};
 }
 
 module.exports = CameraRoll;

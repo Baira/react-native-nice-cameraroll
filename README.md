@@ -121,6 +121,7 @@ async function savePicture() {
 * [`getAlbums`](#getalbums)
 * [`getPhotos`](#getphotos)
 * [`deletePhotos`](#deletephotos)
+* [`useCameraRoll`](#usecameraroll)
 
 ---
 
@@ -305,6 +306,27 @@ Returns a Promise which will resolve when the deletion request is completed, or 
 | ---- | ---------------------- | -------- | ---------------------------------------------------------- |
 | uri  | string                 | Yes      | See above.                                                 |
 
+
+### `useCameraRoll()`
+
+`useCameraRoll` is a utility hooks for the CameraRoll module. data contains the content stored in the clipboard.
+
+```javascript
+import React, {useEffect} from 'react';
+import {Button} from 'react-native';
+import {useCameraRoll} from "@react-native-community/cameraroll";
+
+export const HooksSample = () => {
+  const {photos, getPhotos, saveToCameraRoll} = useCameraRoll();
+
+  return <>
+    <Button title='Get Photos' onPress={() => getPhotos()}>Get Photos</Button>
+    {
+      photos.map((photo, index) => /* render photos */)
+    }
+  </>;
+};
+```
 
 [circle-ci-badge]:https://img.shields.io/circleci/project/github/react-native-cameraroll/react-native-cameraroll/master.svg?style=flat-square
 [circle-ci]:https://circleci.com/gh/react-native-cameraroll/workflows/react-native-cameraroll/tree/master
